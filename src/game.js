@@ -97,6 +97,8 @@ function drawBall(){
 function animateBall(){
     drawBall()
 
+
+
     //if(currentPlayer == playerNum){
     if( ball.x + ball.radius > canvas.width){
         ball.x = canvas.width / 2 
@@ -126,6 +128,8 @@ function animateBall(){
 
     ball.x += ball.dx
     ball.y += ball.dy
+
+    if(currentPlayer == playerNum) socket.emit("update pos", ball.x, ball.y, playerNum, roomNum)
 
     
 }
@@ -231,6 +235,7 @@ socket.on("ball reset", (side) => {
 socket.on("player num", (pNum, cPlayer) => {
     playerNum = pNum
     currentPlayer = cPlayer
+    
 })
 
 socket.on("paddleL input", (msg) => {
@@ -280,7 +285,12 @@ socket.on("change player", (cPlayer) => {
     currentPlayer = cPlayer
 })
 
-
+socket.on("update pos", (x, y, pNum) => {
+    if(playerNum != pNum){
+        ball.x = x
+        ball.y = y
+    }
+})
 
 
 

@@ -55,9 +55,11 @@ io.on('connection', (socket) => {
     numInRoom++
     console.log(numInRoom + " " + numRooms)
   }else{
-    numInRoom = 1
+    numInRoom = 0
     numRooms++
+    socket.emit("player num", numInRoom + 1, 2)
     socket.join("room-" + numRooms)
+    numInRoom++
     console.log(numInRoom + " " + numRooms)
   }
 
@@ -89,6 +91,10 @@ io.on('connection', (socket) => {
 
   socket.on('change player', (cPlayer, roomNum) => {
     io.sockets.in("room-" + roomNum).emit("change player", cPlayer)
+  })
+
+  socket.on('update pos', (x, y, playerNum, roomNum) => {
+    io.sockets.in("room-" + roomNum).emit("update pos", x, y, playerNum)
   })
 })
 
